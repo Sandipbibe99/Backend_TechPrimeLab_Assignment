@@ -3,6 +3,8 @@ import cors from 'express'
 import dotenv from 'dotenv'
 import { dbConnect } from './config/dbConfig.js'
 import { routes } from "./routes/routes.js"
+import projectRoutes from "./routes/projectRoutes.js"
+import cookieParser from "cookie-parser"
 
 const app = express()
 app.use(cors())
@@ -21,4 +23,6 @@ dbConnect().then(() => [
 )
 
 app.use(express.json())
-app.use("/api" , routes)
+app.use(cookieParser())
+app.use("/api/user" , routes)
+app.use('/api/project' , projectRoutes )

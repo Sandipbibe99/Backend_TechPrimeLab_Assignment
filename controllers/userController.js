@@ -10,13 +10,13 @@ export const adduser = async(request , response) => {
         const isUserExist = await User.findOne({email})
   
         if(!name || !username || !email || !password || !confirmPassword){
-            response.status(404).json({Error : "Please provide all details" , Success : false})
+          return  response.status(404).json({Error : "Please provide all details" , Success : false})
         }
         else if(isUserExist) {
-          response.status(400).json({Error : "User already Exist" , Success : false})
+          return response.status(400).json({Error : "User already Exist" , Success : false})
         }
         else if(password !== confirmPassword) {
-          response.status(400).json({Error : "Both Password must be same" , Success : false})
+          return response.status(400).json({Error : "Both Password must be same" , Success : false})
         }
         else {
           const salt = await bcrypt.genSalt(10)
@@ -50,24 +50,24 @@ export const loginUser = async(request , response) => {
     const isUserExist = await User.findOne({email})
 
     if(!email || !password) {
-       response.status(404).json({Error : "Please provide all details" , Success : false})
+       return response.status(404).json({Error : "Please provide all details" , Success : false})
     }
     else if(!isUserExist){
-       response.status(404).json({Success : false , Message : "Invalid user"})
+      return response.status(404).json({Success : false , Message : "Invalid user"})
     }
     else {
        const isMatch = await bcrypt.compare(password , isUserExist.password) 
        if(isMatch && (isUserExist.email === email)) {
-           const token = jwt.sign({id : isUserExist._id} , process.env.SECRET_KEY , {expiresIn : '5m'})
+           const token = jwt.sign({userId : isUserExist._id} , process.env.SECRET_KEY , {expiresIn : '5m'})
 
            response.cookie("token" , token , {
                httpOnly : true,
            })
-           response.status(200).json({Success : true , Message : "Login successful"})
+           return response.status(200).json({Success : true , Message : "Login successful"})
          
        }
        else{
-        response.status(404).json({Success : false , Message : "Invalid user"})
+        return  response.status(404).json({Success : false , Message : "Invalid user"})
        }
       
     }
