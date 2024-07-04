@@ -27,12 +27,8 @@ const userSchema = new mongoose.Schema({
         required : true,
         unique : false,
     },
-    confirmPassword : {
-        type : String,
-        required : true,
-        unique : false,
-    }
+   
 })
 
-const User = mongoose.Model('TechUser')
+const User = mongoose.model('TechUser' , userSchema)
 export default User

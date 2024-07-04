@@ -1,5 +1,8 @@
 import express from "express"
+import { adduser, loginUser, logoutUser } from "../controllers/userController.js"
 
-const routes = express.Router()
+export const routes = express.Router()
 
-routes.post('/adduser' , )
+routes.post('/adduser' , adduser)
+routes.post('/login' , loginUser)
+routes.post('/logout' , logoutUser)
