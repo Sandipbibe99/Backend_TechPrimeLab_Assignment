@@ -65,7 +65,7 @@ export const loginUser = async(request , response) => {
             httpOnly: true,
             maxAge: 3600000, 
             sameSite: 'None',
-            domain: '192.168.0.106',
+            // domain: '192.168.0.106',
             path: '/' 
         });
 
