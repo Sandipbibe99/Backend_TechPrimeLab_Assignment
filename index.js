@@ -10,17 +10,13 @@ const app = express()
 
 dotenv.config()
 const corsOptions = {
-    origin: (origin, callback) => {
-        
-        if (!origin) return callback(null, true);
-        callback(null, true);
-    },
+    origin: 'https://sandip-tech-prime-lab.netlify.app',
     credentials: true, 
-};
+  };
 app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 4001
-// const SERVER = process.env.SERVER || 'localhost';
+
 
 dbConnect().then(() => [
     app.listen(PORT  , () => {
