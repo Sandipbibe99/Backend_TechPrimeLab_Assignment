@@ -65,7 +65,6 @@ export const loginUser = async(request , response) => {
             httpOnly: true,
             maxAge: 3600000, 
             sameSite: 'None',
-            domain: '.netlify.app',
             path: '/' 
         });
 
@@ -74,11 +73,13 @@ export const loginUser = async(request , response) => {
        }
        else{
         return  response.status(401).json({Success : false , error : "Invalid user"})
+        
        }
       
     }
    }catch(error) {
     return  response.status(500).json({error : error.message , Success : false}) 
+    console.log(error)
    }
   
 }
