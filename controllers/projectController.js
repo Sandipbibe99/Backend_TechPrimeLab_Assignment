@@ -58,25 +58,35 @@ export const addProject = async(request , response) => {
  
 } 
 
-export const getAllProjects = async(request , response) => {
+export const getAllProjects = async (request, response) => {
+  try {
+      const userId = request.userId;
+       console.log(request.userId)
+      const getAllProject = await Project.find({ userId });
 
-    try{
-          
-        const userId = request.userId
-
-        const getAllProject = await Project.find({userId})
-
-        if(getAllProject.length === 0){
-            return response.status(404).json({Success : false , Message : "Nothing to show"})
+      const formattedProjects = getAllProject.map(item => {
+        return {
+          ...item.toObject() ,
+          startDate : item.startDate.toISOString().split("T")[0],
+          endDate : item.endDate.toISOString().split("T")[0]
         }
-    
-        return response.status(200).json({Success : true , Message : "Data get successfully" , projects : getAllProject})
-    }
-    catch(error) {
-        return  response.status(500).json({error : "Internal Server Error" , Success : false})
-    }
- 
+    });
+
+
+      if (getAllProject.length === 0) {
+          return response.status(404).json({ Success: false, Message: "Nothing to show" });
+      }
+
+      return response.status(200).json({
+          Success: true,
+          Message: "Data fetched successfully",
+          projects: formattedProjects
+      });
+  } catch (error) {
+      return response.status(500).json({ error: "Internal Server Error", Success: false });
+  }
 }
+
 
 export const updateStatus = async(request , response) => {
       
@@ -87,10 +97,10 @@ export const updateStatus = async(request , response) => {
      const updatedProject = await Project.findByIdAndUpdate(_id , {status} , {new : true})
 
      if(!updatedProject) {
-        return response.status(404).json({ Success: false, Message: "Project not found or could not be updated." });
+        return response.status(404).json({ Success: false, message: "Project not found or could not be updated." });
      }
 
-     return response.status(200).json({ Success: true, Message: "Project updated successfully." });
+     return response.status(200).json({ Success: true, message: "Project updated successfully." });
     }catch(error) {
         return  response.status(500).json({error : "Internal Server Error" , Success : false})
     }
@@ -114,19 +124,19 @@ export const getCountAccordingToStatus = async(request , response) => {
          ])
 
          const count = {
-            total : statusCounts.reduce((acc , curr) => acc + curr.count , 0),
-            running: 0,
-            cancelled: 0,
-            closed: 0
+             "Total Project"  : statusCounts.reduce((acc , curr) => acc + curr.count , 0),
+            "Running": 0,
+            "Cancelled": 0,
+            "Closed": 0
          }
 
          statusCounts.forEach((status) => {
             if(status._id === "running") {
-                count.running = status.count;
+                count["Running"] = status.count;
             } else if (status._id === "cancelled") {
-                count.cancelled = status.count;
+                count["Cancelled"] = status.count;
             } else if (status._id === "closed") {
-                count.closed = status.count;
+                count["Closed"] = status.count;
             }
          })
 
@@ -162,7 +172,7 @@ export const getClosureDelayCount = async(request , response) => {
   export const getCountByStatusAndDepartment = async (request, response) => {
     try {
         const userId = request.userId;
-        const departments = ['strategy', 'finance', 'quality', 'maintenance', 'stores', 'hr'];
+        const departments = ['Strategy', 'Finance', 'Quality', 'Maintenance', 'Stores', 'HR'];
     
       
         const results = await Project.aggregate([
@@ -213,25 +223,25 @@ export const getClosureDelayCount = async(request , response) => {
     
        
         const countTotal = departments.map(dept => {
-          const found = totalProjects.find(proj => proj.department === dept);
+          const found = totalProjects.find(proj => proj.department === dept.toLowerCase());
           return found ? found.count : 0;
         });
     
         const countClosed = departments.map(dept => {
-          const found = closedProjects.find(proj => proj.department === dept);
+          const found = closedProjects.find(proj => proj.department === dept.toLowerCase());
           return found ? found.count : 0;
         });
-    
+      const categories = departments
         const result = {
-          departments,
+          categories,
           series: [
             {
               name: 'total',
-              countTotal: countTotal
+              data: countTotal
             },
             {
               name: 'closed',
-              countClosed: countClosed
+              data: countClosed
             }
           ]
         };
