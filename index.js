@@ -10,10 +10,11 @@ const app = express()
 
 dotenv.config()
 const corsOptions = {
-    origin: ['https://sandip-tech-prime-lab.netlify.app', 'http://localhost:3000' , 'http://192.168.0.106:3000'],
+    origin: ['https://sandip-tech-prime-lab.netlify.app', 'http://localhost:3000' ],
     credentials: true,
 };
-app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); 
+
 
 app.use(cors(corsOptions));
 
