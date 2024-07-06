@@ -1,5 +1,5 @@
 import express from "express"
-import cors from 'express'
+import cors from 'cors'
 import dotenv from 'dotenv'
 import { dbConnect } from './config/dbConfig.js'
 import { routes } from "./routes/routes.js"
@@ -7,14 +7,23 @@ import projectRoutes from "./routes/projectRoutes.js"
 import cookieParser from "cookie-parser"
 
 const app = express()
-app.use(cors())
+
 dotenv.config()
+const corsOptions = {
+    origin: (origin, callback) => {
+        
+        if (!origin) return callback(null, true);
+        callback(null, true);
+    },
+    credentials: true, 
+};
+app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 4001
-
+// const SERVER = process.env.SERVER || 'localhost';
 
 dbConnect().then(() => [
-    app.listen(PORT , () => {
+    app.listen(PORT  , () => {
         console.log(`App running on port ${PORT}`)
     })
 ]).catch((error) => {

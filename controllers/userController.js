@@ -44,39 +44,43 @@ export const adduser = async(request , response) => {
 }
 
 export const loginUser = async(request , response) => {
-     
+
    try{
     const {email , password} = request.body
     const isUserExist = await User.findOne({email})
 
     if(!email || !password) {
-       return response.status(404).json({Error : "Please provide all details" , Success : false})
+       return response.status(400).json({error : "Please provide all details" , Success : false})
     }
     else if(!isUserExist){
-      return response.status(404).json({Success : false , Message : "Invalid user"})
+      return response.status(404).json({Success : false , error : "Invalid user"})
     }
     else {
        const isMatch = await bcrypt.compare(password , isUserExist.password) 
        if(isMatch && (isUserExist.email === email)) {
-           const token = jwt.sign({userId : isUserExist._id} , process.env.SECRET_KEY , {expiresIn : '5m'})
+           const token = jwt.sign({userId : isUserExist._id} , process.env.SECRET_KEY , {expiresIn : '1h'})
+           
+           response.cookie('token', token, {
+            secure: false, 
+            httpOnly: true,
+            maxAge: 3600000, 
+            sameSite: 'None',
+            domain: '192.168.0.106',
+            path: '/' 
+        });
 
-           response.cookie("token" , token , {
-               httpOnly : true,
-           })
-           return response.status(200).json({Success : true , Message : "Login successful"})
+           return response.status(200).json({Success : true , message : "Login successful" })
          
        }
        else{
-        return  response.status(404).json({Success : false , Message : "Invalid user"})
+        return  response.status(401).json({Success : false , error : "Invalid user"})
        }
       
     }
    }catch(error) {
     return  response.status(500).json({error : error.message , Success : false}) 
    }
-
-
-   
+  
 }
 
 export const logoutUser = async(request , response) => {
