@@ -61,11 +61,11 @@ export const loginUser = async(request , response) => {
            const token = jwt.sign({userId : isUserExist._id} , process.env.SECRET_KEY , {expiresIn : '1h'})
            
            response.cookie('token', token, {
-            secure: false, 
+            secure: true, 
             httpOnly: true,
             maxAge: 3600000, 
             sameSite: 'None',
-            // domain: '192.168.0.106',
+            domain: '.netlify.app',
             path: '/' 
         });
 
