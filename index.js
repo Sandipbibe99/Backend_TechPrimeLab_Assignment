@@ -31,7 +31,6 @@ app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 4001
 
-
 dbConnect().then(() => [
     app.listen(PORT   ,() => {
         console.log(`App running on port ${PORT}`)

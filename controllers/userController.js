@@ -44,7 +44,7 @@ export const adduser = async(request , response) => {
 }
 
 export const loginUser = async(request , response) => {
-  console.log('url reached')
+
    try{
     const {email , password} = request.body
     const isUserExist = await User.findOne({email})
@@ -79,7 +79,7 @@ export const loginUser = async(request , response) => {
     }
    }catch(error) {
     return  response.status(500).json({error : error.message , Success : false}) 
-    console.log(error)
+   
    }
   
 }

@@ -53,7 +53,7 @@ export const addProject = async(request , response) => {
     }
     catch(error){
         return  response.status(500).json({error : error.message , Success : false})
-        console.log(error)
+        
     }
  
 } 
@@ -61,7 +61,7 @@ export const addProject = async(request , response) => {
 export const getAllProjects = async (request, response) => {
   try {
       const userId = request.userId;
-       console.log(request.userId)
+      
       const getAllProject = await Project.find({ userId });
 
       const formattedProjects = getAllProject.map(item => {
@@ -154,31 +154,14 @@ export const getCountAccordingToStatus = async(request , response) => {
         return response.status(200).json({Success : true , count})
   }
   catch (error){
-    console.error("Error in getCountAccordingToStatus:", error);
+   
     return  response.status(500).json({error : "Internal Server Error" , Success : false})
   }
 
 }
 
 
-// export const getClosureDelayCount = async(request , response) => {
 
-//     try{
-//             const currentDate = new Date
-//             const userId = request.userId
-
-//             const count = await Project.countDocuments({
-//                 userId ,
-//                 endDate : { $lt : currentDate}
-//             })
-
-//              return response.status(200).json({Success : true , countDelayProjects : count})
-//     }
-//     catch{
-//       return  response.status(500).json({error : "Internal Server Error" , Success : false})
-//     }
-  
-//   }
 
   export const getCountByStatusAndDepartment = async (request, response) => {
     try {
@@ -242,9 +225,17 @@ export const getCountAccordingToStatus = async(request , response) => {
           const found = closedProjects.find(proj => proj.department === dept.toLowerCase());
           return found ? found.count : 0;
         });
+
+        const percentageArray = countTotal.map((item , index) => {
+           const countclosed = countClosed[index]
+
+           return item > 0 ? ((countclosed/item)*100).toFixed(2) : "0.00" ;
+        })
+
       const categories = departments
         const result = {
           categories,
+          percentageArray,
           series: [
             {
               name: 'total',
@@ -257,22 +248,14 @@ export const getCountAccordingToStatus = async(request , response) => {
           ]
         };
     
-        return response.status(200).json(result);
+        return response.status(200).json({Success : true , result : result});
       } catch (error) {
-        console.error("Error in getProjectCountsByDepartment:", error);
+      
         return response.status(500).json({ error: error.message, Success: false });
       }
   };
 
 
-//  department : [strategy , finance , quality , maintainance , stores , hr]
-//   series: [
-//     {
-//         name: 'total',
-//         count: [10, 20, 10, 10, 10, 10]
-//     },
-//     {
-//         name: 'closed',
-//         count: [9, 9, 9, 9, 5, 6]
-//     }
-// ]
+  export const verifytheuser = async (request, response) => {
+    return response.status(200).json({Success : true , message : "authorized"});
+  }
