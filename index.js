@@ -10,10 +10,21 @@ const app = express()
 
 dotenv.config()
 const corsOptions = {
-    origin: ['https://sandip-tech-prime-lab.netlify.app', 'http://localhost:3000' ],
-    credentials: true,
+    origin: (origin, callback) => {
+        callback(null, origin); // Reflect the origin in the CORS response
+    },
+    credentials: true
 };
-app.options('*', cors(corsOptions)); 
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", req.headers.origin); // Allow the request's origin
+    res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE"); // Allow these methods
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization"); // Allow these headers
+    next();
+});
+
+app.options('*', cors(corsOptions));
 
 
 app.use(cors(corsOptions));
