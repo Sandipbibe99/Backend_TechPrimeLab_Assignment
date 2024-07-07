@@ -86,16 +86,15 @@ export const loginUser = async(request , response) => {
 
 export const logoutUser = async (request, response) => {
   try {
-    const token = request.cookies.token;
-
-    if (!token) {
-      return response.status(400).json({ success: false, message: "No token provided" });
-    }
-
-    response.clearCookie("token");
-    return response.status(200).json({ success: true, message: "Logged out successfully" });
+    response.cookie('token', '', {
+      expires: new Date(0),
+      secure: true,
+      httpOnly: true,
+      sameSite: 'None',
+      path: '/'
+  });
+      return response.status(200).json({ success: true, message: "Logged out successfully" });
   } catch (error) {
-    return response.status(500).json({ error: error.message, success: false });
+      return response.status(500).json({ error: error.message, success: false });
   }
 };
-
