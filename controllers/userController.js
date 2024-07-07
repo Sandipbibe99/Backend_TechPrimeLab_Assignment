@@ -84,14 +84,11 @@ export const loginUser = async(request , response) => {
   
 }
 
-export const logoutUser = async(request , response) => {
-  try{
-
-
-       
-   response.clearCookie("token")
-   return response.status(200).json({ Success: true, Message: "Logged out successfully" });
-  }catch(error) {
-    return  response.status(500).json({error : error.message , Success : false}) 
+export const logoutUser = async (request, response) => {
+  try {
+      response.clearCookie("token");
+      return response.status(200).json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+      return response.status(500).json({ error: error.message, success: false });
   }
-}
+};

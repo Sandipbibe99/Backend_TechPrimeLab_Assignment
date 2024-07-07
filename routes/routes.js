@@ -7,6 +7,6 @@ export const routes = express.Router()
 
 routes.post('/adduser' , adduser)
 routes.post('/login' , loginUser)
-routes.post('/logout' , verifyToken , logoutUser)
+routes.post('/logout'  , logoutUser)
 
 
