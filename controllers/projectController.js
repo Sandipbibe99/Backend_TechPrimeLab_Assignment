@@ -123,10 +123,21 @@ export const getCountAccordingToStatus = async(request , response) => {
             }
          ])
 
+         const currentDate = new Date
+        
+
+         const closurecount = await Project.countDocuments({
+             userId ,
+             endDate : { $lt : currentDate}
+         })
+
+         
+
          const count = {
              "Total Project"  : statusCounts.reduce((acc , curr) => acc + curr.count , 0),
             "Running": 0,
             "Cancelled": 0,
+            "Closure Delay" : closurecount,
             "Closed": 0
          }
 
@@ -150,24 +161,24 @@ export const getCountAccordingToStatus = async(request , response) => {
 }
 
 
-export const getClosureDelayCount = async(request , response) => {
+// export const getClosureDelayCount = async(request , response) => {
 
-    try{
-            const currentDate = new Date
-            const userId = request.userId
+//     try{
+//             const currentDate = new Date
+//             const userId = request.userId
 
-            const count = await Project.countDocuments({
-                userId ,
-                endDate : { $lt : currentDate}
-            })
+//             const count = await Project.countDocuments({
+//                 userId ,
+//                 endDate : { $lt : currentDate}
+//             })
 
-             return response.status(200).json({Success : true , countDelayProjects : count})
-    }
-    catch{
-      return  response.status(500).json({error : "Internal Server Error" , Success : false})
-    }
+//              return response.status(200).json({Success : true , countDelayProjects : count})
+//     }
+//     catch{
+//       return  response.status(500).json({error : "Internal Server Error" , Success : false})
+//     }
   
-  }
+//   }
 
   export const getCountByStatusAndDepartment = async (request, response) => {
     try {
