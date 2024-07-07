@@ -11,16 +11,16 @@ const app = express()
 dotenv.config()
 const corsOptions = {
     origin: (origin, callback) => {
-        callback(null, origin); // Reflect the origin in the CORS response
+        callback(null, origin); 
     },
     credentials: true
 };
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", req.headers.origin); // Allow the request's origin
-    res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE"); // Allow these methods
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization"); // Allow these headers
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE"); 
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization"); 
     next();
 });
 
