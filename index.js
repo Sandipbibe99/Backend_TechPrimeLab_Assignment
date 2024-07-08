@@ -10,26 +10,9 @@ const app = express()
 
 dotenv.config()
 const corsOptions = {
-    origin: (origin, callback) => {
-       
-        const allowedOrigins = [
-            'https://techprimelabassignmentf.netlify.app',
-            'https://main--techprimelabassignmentf.netlify.app',
-            'https://main--techprimelabassignmentf.netlify.app/dashboard',
-            'https://main--techprimelabassignmentf.netlify.app/project-listing',
-            'https://main--techprimelabassignmentf.netlify.app/add-project',
-            'http://localhost:4000'
-        ];
-        
-        if (allowedOrigins.includes(origin)) {
-            callback(null, origin);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: true, 
     credentials: true
 };
-
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", req.headers.origin);
@@ -38,7 +21,6 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization"); 
     next();
 });
-
 app.options('*', cors(corsOptions));
 
 
